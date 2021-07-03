@@ -1,4 +1,3 @@
-import { add } from "./utils/tools";
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
@@ -20,7 +19,6 @@ function App() {
           Learn React
         </a>
       </header>
-      {add(1, 2)}
     </div>
   );
 }
