@@ -1,5 +1,5 @@
 {
-  "users":[
+  "users": [
     {
       "id": 1,
       "name": "高修文"
@@ -16,7 +16,6 @@
       "id": 4,
       "name": "王文静"
     }
-
   ],
   "projects": [
     {
@@ -54,5 +53,9 @@
       "organization": "外卖组",
       "created": 1546900800000
     }
-  ]
+  ],
+  "login": {
+    "username": "12",
+    "password": "33"
+  }
 }

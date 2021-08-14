@@ -1,3 +1,5 @@
+import { Input, Select } from "antd";
+const { Option } = Select;
 export interface Users {
   id: string;
   name: string;
@@ -12,37 +14,38 @@ interface searchPanelProps {
 }
 function SearchPanel({ params, setParams, users }: searchPanelProps) {
   return (
-    <form>
-      <input
+    <div style={{ display: "flex" }}>
+      <Input
         type="text"
+        placeholder="用户名或者项目名"
+        allowClear={true}
         value={params.name}
-        onChange={(evt) => {
+        onChange={(e) => {
           setParams({
             ...params,
-            name: evt.target.value,
+            name: e.target.value,
           });
         }}
       />
-      <select
+      <Select
         value={params.personId}
-        onChange={(e) => {
-          console.log(e.target.value);
+        onSelect={(value) => {
           setParams({
             ...params,
-            personId: e.target.value,
+            personId: value,
           });
         }}
       >
-        <option value="">负责人</option>
+        <Option value="">负责人</Option>
         {users.map((item) => {
           return (
-            <option value={item.id} key={item.id}>
+            <Option value={item.id} key={item.id}>
               {item.name}
-            </option>
+            </Option>
           );
         })}
-      </select>
-    </form>
+      </Select>
+    </div>
   );
 }
 export default SearchPanel;

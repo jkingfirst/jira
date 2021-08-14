@@ -1,0 +1,50 @@
+import * as qs from "qs";
+import * as auth from "auth-provider";
+import { useAuth } from "../context/auth-context";
+let BASE_API_URL = process.env.REACT_APP_API_URL;
+interface config extends RequestInit {
+  token?: string;
+  data?: object;
+}
+export async function http(
+  url: string,
+  { data, token, headers, ...customConfig }: config
+) {
+  let setting = {
+    method: "GET",
+    headers: {
+      Authorization: token ? `Bearer ${token}` : "",
+      "Content-Type": data ? "application/json" : "",
+    },
+    ...customConfig,
+  };
+  let httpUrl = "";
+  if (setting.method.toUpperCase() === "GET") {
+    httpUrl = `${BASE_API_URL}${url}?${qs.stringify(data)}`;
+  } else if (setting.method.toUpperCase() === "POST") {
+    httpUrl = `${BASE_API_URL}${url}`;
+    setting["body"] = qs.stringify(data);
+  }
+  return window
+    .fetch(httpUrl, setting)
+    .then(async (res) => {
+      if (res.status === 401) {
+        await auth.loginout();
+        // window.location.reload();
+        return Promise.reject({ message: "请重新登录" });
+      }
+      if (res.ok) {
+        return await res.json();
+      } else {
+        return Promise.reject(res);
+      }
+    })
+    .then((res) => {
+      return res;
+    });
+}
+export const useHttp = () => {
+  const { user } = useAuth();
+  return (url: string, config: config) =>
+    http(url, { ...config, token: user?.token });
+};

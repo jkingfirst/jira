@@ -40,3 +40,8 @@ export const useArray = <T>(arr: T[]) => {
     },
   };
 };
+export const useMount = (callback: () => void) => {
+  useEffect(() => {
+    callback();
+  }, []);
+};
