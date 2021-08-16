@@ -20,7 +20,6 @@ export default function Login() {
   };
   return (
     <Form onFinish={handelSubmit} {...formItemLayout}>
-      {user ? <div>{user.name}</div> : ""}
       <Form.Item
         label="用户名"
         name="username"

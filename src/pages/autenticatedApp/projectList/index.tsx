@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import SearchPanel from "./components/searchPanel/index";
 import TableList from "./components/tablelist/index";
-import * as qs from "qs";
 import { useHttp } from "../../../utils/httpRequest";
 import { deleteObjEmptyProperty, useDebounce } from "utils/tools";
-let BASE_API_URL = process.env.REACT_APP_API_URL;
+import styled from "@emotion/styled";
+import { Row } from "component/libStyle";
 function Project() {
   const [params, setParams] = useState({
     personId: "",
@@ -25,21 +25,32 @@ function Project() {
     PList("/users", {}).then((res) => {
       setUsers(res);
     });
-    /*fetch(`${BASE_API_URL}/users`)
-      .then(async (response) => response.json())
-      .then((res) => {
-        setTimeout(() => {
-          setUsers(res);
-        }, 0);
-        console.log(users);
-      });*/
   }, []);
   return (
-    <>
-      <div>hello</div>
+    <Container>
+      <Header>
+        <HeaderLeft gap={true}>
+          <h1>logo</h1>
+          <h1>项目</h1>
+          <h1>用户名</h1>
+        </HeaderLeft>
+        <HeaderRight></HeaderRight>
+      </Header>
       <SearchPanel users={users} params={params} setParams={setParams} />
       <TableList list={projectList} users={users} />
-    </>
+    </Container>
   );
 }
 export default Project;
+const Container = styled.div`
+  display: grid;
+  grid-template-rows: 6rem 1fr;
+  height: 100vh;
+`;
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+const HeaderLeft = styled(Row)``;
+const HeaderRight = styled.div``;
