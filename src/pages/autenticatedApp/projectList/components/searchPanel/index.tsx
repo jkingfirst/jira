@@ -1,3 +1,5 @@
+/* @jsxImportSource @emotion/react */
+import { jsx } from "@emotion/react";
 import { Form, Input, Select } from "antd";
 const { Option } = Select;
 export interface Users {
@@ -14,7 +16,7 @@ interface searchPanelProps {
 }
 function SearchPanel({ params, setParams, users }: searchPanelProps) {
   return (
-    <Form layout={"inline"}>
+    <Form layout={"inline"} css={{ marginBottom: "2rem" }}>
       <Form.Item>
         <Input
           type="text"
