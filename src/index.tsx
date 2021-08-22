@@ -4,12 +4,13 @@ import "./index.css";
 import App from "./App";
 import AppProvider from "context";
 import reportWebVitals from "./reportWebVitals";
-import { loadDevTools } from "jira-dev-tool";
+import { loadServer, DevTools } from "jira-dev-tool";
 import "antd/dist/antd.less";
-loadDevTools(() => {
+loadServer(() => {
   ReactDOM.render(
     <React.StrictMode>
       <AppProvider>
+        <DevTools />
         <App />
       </AppProvider>
     </React.StrictMode>,

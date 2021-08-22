@@ -1,8 +1,4 @@
-/* @jsxImportSource @emotion/react */
-import { jsx } from "@emotion/react";
-import React from "react";
 import styled from "@emotion/styled";
-import { ReactElement } from "react";
 export const Row = styled.div<{
   gap?: number | boolean;
   between?: boolean;

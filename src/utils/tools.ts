@@ -3,12 +3,13 @@ export const isFalse = (val: unknown) => {
   // unknown 可以代替any,却能有严格的限制 unknown不能赋值给任何变量
   return val === 0 ? false : !val;
 };
-export const deleteObjEmptyProperty = (obj: object) => {
-  let tempObj: object = { ...obj };
+export const isVoid = (val: unknown) =>
+  val === undefined || val === null || val === "";
+// Object对象可能是{a:'a'} 或函数()=>{}, 或 newRegExp() 这里我们需要键值对形式
+export const deleteObjEmptyProperty = (obj: { [key: string]: unknown }) => {
+  let tempObj = { ...obj };
   for (let key in tempObj) {
-    // @ts-ignore
-    if (isFalse(tempObj[key])) {
-      // @ts-ignore
+    if (isVoid(tempObj[key])) {
       delete tempObj[key];
     }
   }
@@ -43,5 +44,6 @@ export const useArray = <T>(arr: T[]) => {
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };

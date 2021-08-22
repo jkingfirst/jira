@@ -20,14 +20,17 @@ function TableList({ list, users }: tabList) {
         {
           title: "名称",
           dataIndex: "name",
+          key: "name",
         },
         {
           title: "部门",
           dataIndex: "organization",
+          key: "organization",
         },
         {
           title: "负责人",
           dataIndex: "person",
+          key: "person",
           render(text, record, index) {
             return (
               <span>
@@ -40,6 +43,7 @@ function TableList({ list, users }: tabList) {
         {
           title: "创建时间",
           dataIndex: "created",
+          key: "created",
           render: (value, row) => {
             return (
               <span>
@@ -49,6 +53,7 @@ function TableList({ list, users }: tabList) {
           },
         },
       ]}
+      rowKey={(record) => record.id}
     ></Table>
   );
 }

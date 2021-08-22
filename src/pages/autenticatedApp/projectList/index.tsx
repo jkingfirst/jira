@@ -34,11 +34,13 @@ function Project() {
         setProjectList(res);
       }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceParams]);
   useEffect(() => {
     PList("/users", {}).then((res) => {
       setUsers(res);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <Container>
@@ -53,7 +55,7 @@ function Project() {
         </HeaderLeft>
         <HeaderRight>
           <Dropdown overlay={menu}>
-            <Button type={"link"}>{user?.name}</Button>
+            <Button type={"link"}>Hi:{user?.name}</Button>
           </Dropdown>
         </HeaderRight>
       </Header>

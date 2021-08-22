@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 // import Project from "pages/projectList/";
 // import Test from "pages/reactTest";

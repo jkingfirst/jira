@@ -18,7 +18,9 @@ export default function UnAuthenticatedApp() {
         <Title>{isLogin ? "请登录" : "请注册"}</Title>
         <Header></Header>
         {isLogin ? <Login /> : <Register />}
-        <a onClick={switchLoginOrRegister}>{isLogin ? "去注册" : "去登录"}</a>
+        <Button type={"link"} onClick={switchLoginOrRegister}>
+          {isLogin ? "去注册" : "去登录"}
+        </Button>
       </ShadowCard>
     </Wrapper>
   );
