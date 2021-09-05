@@ -1,21 +1,21 @@
-import { Users } from "../searchPanel/index";
+import { user } from "types/user";
 import { Table } from "antd";
 import dayjs from "dayjs";
-interface Project {
+import { TableProps } from "antd/es/table";
+export interface Project {
   id: string;
   name: string;
   personId: string;
   organization: string;
   created: number;
 }
-interface tabList {
-  list: Project[];
-  users: Users[];
+interface tabList extends TableProps<Project> {
+  users: user[];
 }
-function TableList({ list, users }: tabList) {
+function TableList({ users, ...props }: tabList) {
   return (
     <Table
-      dataSource={list}
+      {...props}
       columns={[
         {
           title: "名称",
@@ -34,8 +34,9 @@ function TableList({ list, users }: tabList) {
           render(text, record, index) {
             return (
               <span>
-                {users.find((user: Users) => user.id === record.personId)
-                  ?.name || "未知"}
+                {users.find(
+                  (user: user) => Number(user.id) === Number(record.personId)
+                )?.name || "未知"}
               </span>
             );
           },

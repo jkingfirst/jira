@@ -2,46 +2,67 @@ import { useState, useEffect } from "react";
 import SearchPanel from "./components/searchPanel/index";
 import TableList from "./components/tablelist/index";
 import { useHttp } from "../../../utils/httpRequest";
-import { deleteObjEmptyProperty, useDebounce } from "utils/tools";
 import styled from "@emotion/styled";
 import { Row } from "component/libStyle";
-import { Button, Menu, Dropdown } from "antd";
+import { Button, Menu, Dropdown, message } from "antd";
 import { ReactComponent as SortwareLogo } from "assets/software-logo.svg";
 import { useAuth } from "context/auth-context";
-
-function Project() {
+// import {useAsync} from "utils/useAsync";
+import { useProject } from "../../../utils/project";
+import { useUsers } from "../../../utils/user";
+import { useDebounce } from "utils/tools";
+interface list {
+  id: string;
+  name: string;
+  personId: string;
+  organization: string;
+  created: number;
+}
+function ProjectPage() {
   const [params, setParams] = useState({
     personId: "",
     name: "",
   });
   const debounceParams = useDebounce(params, 1000);
-  const [projectList, setProjectList] = useState([]);
-  const [users, setUsers] = useState([]);
+  // const [projectList, setProjectList] = useState([]);
+  // const [users, setUsers] = useState([]);
   const PList = useHttp();
-  const { user, loginout } = useAuth();
+  const { user, logout } = useAuth();
+  const { data: projectList, isRuning } = useProject(debounceParams);
+  const { data: users } = useUsers();
+  console.log("projectList", projectList);
   const menu = (
     <Menu>
-      <Menu className="Item" key={"logout"}>
-        <Button type={"link"} onClick={loginout}>
+      <Menu.Item className="Item" key={"logout"}>
+        <Button type={"link"} onClick={logout}>
           登出
         </Button>
-      </Menu>
+      </Menu.Item>
     </Menu>
   );
   useEffect(() => {
-    PList("/projects", { data: deleteObjEmptyProperty(debounceParams) }).then(
+    // run(PList("/projects", { data: deleteObjEmptyProperty(debounceParams)}))
+    /*PList("/projects", { data: deleteObjEmptyProperty(debounceParams) }).then(
       (res) => {
         setProjectList(res);
       }
-    );
+    ).catch(err=>{
+        setProjectList([])
+        message.error(err.message)
+    }).finally(()=>{
+      setLoading(false)
+    });*/
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceParams]);
-  useEffect(() => {
-    PList("/users", {}).then((res) => {
-      setUsers(res);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //
+  //   PList("/users", {}).then((res) => {
+  //     console.log('user--------')
+  //     console.log('user',res)
+  //     setUsers(res);
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
   return (
     <Container>
       <Header>
@@ -61,13 +82,21 @@ function Project() {
       </Header>
       <Content>
         <h1>项目列表</h1>
-        <SearchPanel users={users} params={params} setParams={setParams} />
-        <TableList list={projectList} users={users} />
+        <SearchPanel
+          users={users || []}
+          params={params}
+          setParams={setParams}
+        />
+        <TableList
+          loading={isRuning}
+          dataSource={projectList || []}
+          users={users || []}
+        />
       </Content>
     </Container>
   );
 }
-export default Project;
+export default ProjectPage;
 const Container = styled.div`
   display: grid;
   grid-template-rows: 6rem 1fr;

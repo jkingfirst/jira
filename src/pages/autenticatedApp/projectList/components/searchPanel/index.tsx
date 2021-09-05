@@ -1,17 +1,15 @@
 /* @jsxImportSource @emotion/react */
+import { jsx } from "@emotion/react";
 import { Form, Input, Select } from "antd";
+import { user } from "types/user";
 const { Option } = Select;
-export interface Users {
-  id: string;
-  name: string;
-}
 interface searchPanelProps {
   params: {
     name: string;
     personId: string;
   };
   setParams: (params: searchPanelProps["params"]) => void;
-  users: Users[];
+  users: user[];
 }
 function SearchPanel({ params, setParams, users }: searchPanelProps) {
   return (

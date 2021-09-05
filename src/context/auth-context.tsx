@@ -4,12 +4,15 @@ import { user } from "types/user";
 import { ReactNode } from "react";
 import { useMount } from "../utils/tools";
 import { http } from "../utils/httpRequest";
+import { message } from "antd";
+import { useAsync } from "../utils/useAsync";
+import { FullPageLoading, FullPageError } from "component/libStyle";
 const AuthContext = React.createContext<
   | {
       user: user | null;
       login: (data: formData) => Promise<void>;
       register: (data: formData) => Promise<void>;
-      loginout: () => Promise<void>;
+      logout: () => Promise<void>;
     }
   | undefined
 >(undefined);
@@ -28,19 +31,54 @@ async function initUser() {
   return user;
 }
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<user | null>(null);
-  const login = (data: formData) => auth.login(data).then(setUser);
-  const register = (data: formData) => auth.register(data).then(setUser);
-  const loginout = () => auth.loginout().then(() => setUser(null));
+  const {
+    error,
+    data: user,
+    run,
+    isIdle,
+    isRuning,
+    isError,
+    data,
+    setData: setUser,
+  } = useAsync<user | null>();
+  // const [user, setUser] = useState<user | null>(null);
+  const login = (data: formData) =>
+    auth
+      .login(data)
+      .then((data) => {
+        setUser(data.user);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      });
+  const register = (data: formData) =>
+    auth
+      .register(data)
+      .then((data) => {
+        setUser(data.user);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      });
+  const logout = () => auth.logout().then(() => setUser(null));
   useMount(() => {
-    initUser().then((user) => {
-      setUser(user);
-    });
+    // initUser().then((user) => {
+    //   setUser(user);
+    // }).catch(err=>{
+    //   console.log(err)
+    // });
+    run(initUser());
   });
+  if (isIdle || isRuning) {
+    return <FullPageLoading></FullPageLoading>;
+  }
+  if (isError) {
+    return <FullPageError error={error}></FullPageError>;
+  }
   return (
     <AuthContext.Provider
       children={children}
-      value={{ user, login, register, loginout }}
+      value={{ user, login, register, logout }}
     />
   );
 };
