@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import * as auth from "auth-provider";
 import { user } from "types/user";
 import { ReactNode } from "react";
@@ -7,6 +7,7 @@ import { http } from "../utils/httpRequest";
 import { message } from "antd";
 import { useAsync } from "../utils/useAsync";
 import { FullPageLoading, FullPageError } from "component/libStyle";
+import { DevTools } from "jira-dev-tool";
 const AuthContext = React.createContext<
   | {
       user: user | null;
@@ -38,7 +39,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isIdle,
     isRuning,
     isError,
-    data,
     setData: setUser,
   } = useAsync<user | null>();
   // const [user, setUser] = useState<user | null>(null);
@@ -73,7 +73,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return <FullPageLoading></FullPageLoading>;
   }
   if (isError) {
-    return <FullPageError error={error}></FullPageError>;
+    return (
+      <>
+        <DevTools />
+        <FullPageError error={error}></FullPageError>;
+      </>
+    );
   }
   return (
     <AuthContext.Provider

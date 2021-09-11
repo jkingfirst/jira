@@ -29,7 +29,6 @@ export const useAsync = <D>(initialState?: State<D>) => {
     if (!promise || !promise.then) {
       throw new Error("请传入Promise对象");
     }
-    console.log(1);
     setState({ ...state, stat: "runing" });
     return promise
       .then((res) => {
@@ -52,7 +51,5 @@ export const useAsync = <D>(initialState?: State<D>) => {
     run,
     ...state,
   };
-  console.log("异步hook");
-  console.log(obj);
   return obj;
 };

@@ -19,8 +19,6 @@ export async function http(
     },
     ...customConfig,
   };
-  console.log(url);
-  console.log(token);
   let httpUrl = "";
   if (setting.method.toUpperCase() === "GET") {
     httpUrl = `${BASE_API_URL}${url}?${qs.stringify(data)}`;

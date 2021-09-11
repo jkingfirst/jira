@@ -1,24 +1,19 @@
 import { useState, useEffect } from "react";
 import SearchPanel from "./components/searchPanel/index";
 import TableList from "./components/tablelist/index";
-import { useHttp } from "../../../utils/httpRequest";
 import styled from "@emotion/styled";
 import { Row } from "component/libStyle";
-import { Button, Menu, Dropdown, message } from "antd";
+import { Button, Menu, Dropdown } from "antd";
 import { ReactComponent as SortwareLogo } from "assets/software-logo.svg";
 import { useAuth } from "context/auth-context";
 // import {useAsync} from "utils/useAsync";
 import { useProject } from "../../../utils/project";
 import { useUsers } from "../../../utils/user";
 import { useDebounce } from "utils/tools";
-interface list {
-  id: string;
-  name: string;
-  personId: string;
-  organization: string;
-  created: number;
-}
+// import {Helmet} from 'react-helmet'
+import { useDocumentTitle } from "utils/tools";
 function ProjectPage() {
+  useDocumentTitle("项目列表", false);
   const [params, setParams] = useState({
     personId: "",
     name: "",
@@ -26,11 +21,9 @@ function ProjectPage() {
   const debounceParams = useDebounce(params, 1000);
   // const [projectList, setProjectList] = useState([]);
   // const [users, setUsers] = useState([]);
-  const PList = useHttp();
   const { user, logout } = useAuth();
   const { data: projectList, isRuning } = useProject(debounceParams);
   const { data: users } = useUsers();
-  console.log("projectList", projectList);
   const menu = (
     <Menu>
       <Menu.Item className="Item" key={"logout"}>
@@ -65,6 +58,9 @@ function ProjectPage() {
   // }, []);
   return (
     <Container>
+      {/*<Helmet>
+            <title>任务列表</title>
+        </Helmet>*/}
       <Header>
         <HeaderLeft gap={true}>
           <SortwareLogo

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 export const isFalse = (val: unknown) => {
   // unknown 可以代替any,却能有严格的限制 unknown不能赋值给任何变量
   return val === 0 ? false : !val;
@@ -41,9 +41,24 @@ export const useArray = <T>(arr: T[]) => {
     },
   };
 };
+// 首次加载
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+};
+// 页面标题
+export const useDocumentTitle = (title: string, keepUnMounted = true) => {
+  let oldTitle = useRef(document.title).current;
+  console.log("渲染oldtitle", oldTitle);
+  useEffect(() => {
+    document.title = title;
+    return () => {
+      if (!keepUnMounted) {
+        console.log("卸载oldtitle", oldTitle);
+        document.title = oldTitle;
+      }
+    };
+  }, [title, oldTitle, keepUnMounted]);
 };

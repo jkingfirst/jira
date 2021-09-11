@@ -6,13 +6,20 @@ import styled from "@emotion/styled";
 import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
+// import {Helmet} from 'react-helmet'
+import { useDocumentTitle } from "utils/tools";
+
 export default function UnAuthenticatedApp() {
   const [isLogin, setIsLogin] = useState(true);
   const switchLoginOrRegister = () => {
     setIsLogin(!isLogin);
   };
+  useDocumentTitle("注册或登录");
   return (
     <Wrapper>
+      {/*<Helmet>*/}
+      {/*<title>登录或注册</title>*/}
+      {/*</Helmet>*/}
       <Background />
       <ShadowCard>
         <Title>{isLogin ? "请登录" : "请注册"}</Title>

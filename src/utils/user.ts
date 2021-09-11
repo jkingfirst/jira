@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAsync } from "./useAsync";
 import { useHttp } from "./httpRequest";
 import { user } from "types/user";
