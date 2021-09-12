@@ -51,12 +51,12 @@ export const useMount = (callback: () => void) => {
 // 页面标题
 export const useDocumentTitle = (title: string, keepUnMounted = true) => {
   let oldTitle = useRef(document.title).current;
-  console.log("渲染oldtitle", oldTitle);
+  //console.log("渲染oldtitle", oldTitle);
   useEffect(() => {
     document.title = title;
     return () => {
       if (!keepUnMounted) {
-        console.log("卸载oldtitle", oldTitle);
+        // console.log("卸载oldtitle", oldTitle);
         document.title = oldTitle;
       }
     };
