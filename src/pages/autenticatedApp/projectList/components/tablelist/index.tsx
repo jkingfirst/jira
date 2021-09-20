@@ -3,7 +3,7 @@ import { Table } from "antd";
 import dayjs from "dayjs";
 import { TableProps } from "antd/es/table";
 import ProjectPage from "pages/autenticatedApp/project/project";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 export interface Project {
   id: string;
   name: string;
@@ -15,8 +15,7 @@ interface tabList extends TableProps<Project> {
   users: user[];
 }
 function TableList({ users, ...props }: tabList) {
-  let { path, url } = useRouteMatch();
-  console.log(path, url);
+  //  let { path, url } = useRouteMatch(); Router v5
   return (
     <>
       <Table
@@ -27,7 +26,7 @@ function TableList({ users, ...props }: tabList) {
             dataIndex: "name",
             key: "name",
             render: (value, row) => {
-              return <Link to={`${url}/${String(row.id)}`}>{value}</Link>;
+              return <Link to={String(row.id)}>{value}</Link>;
             },
           },
           {

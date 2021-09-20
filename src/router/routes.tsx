@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default function JiraRoutes() {
   return (
     <Router>
-      <Switch>
+      <Routes>
         <Route path={"/projects"}></Route>
-      </Switch>
+      </Routes>
     </Router>
   );
 }

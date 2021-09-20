@@ -9,16 +9,13 @@ import { useAuth } from "context/auth-context";
 // import {useAsync} from "utils/useAsync";
 import { useProject } from "utils/project";
 import { useUsers } from "utils/user";
-import { useDebounce } from "utils/tools";
+import { resetRoute, useDebounce } from "utils/tools";
 // import {Helmet} from 'react-helmet'
 import { useDocumentTitle } from "utils/tools";
 import ProjectPage from "pages/autenticatedApp/project/project";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router";
+import { BrowserRouter as Router } from "react-router-dom";
+import { useUrlQueryParams } from "utils/url";
 function ProjectListPage() {
   useDocumentTitle("项目列表", false);
   // useEffect(() => {
@@ -37,7 +34,8 @@ function ProjectListPage() {
         </Helmet>*/}
       <PageHeader></PageHeader>
       <Router>
-        <Switch>
+        {/*升级react-router v5到v6*/}
+        {/*<Switch>
           <Route exact path={"/projects"}>
             {" "}
             <Main />
@@ -46,7 +44,13 @@ function ProjectListPage() {
             {" "}
             <ProjectPage />
           </Route>
-        </Switch>
+            <Redirect to={'/projects'}></Redirect>
+        </Switch>*/}
+        <Routes>
+          <Route path={"/projects"} element={<Main />} />
+          <Route path={"/projects/:projectId/*"} element={<ProjectPage />} />
+          <Navigate to={"/projects"} />
+        </Routes>
       </Router>
     </Container>
   );
@@ -65,10 +69,12 @@ function PageHeader() {
   return (
     <Header>
       <HeaderLeft gap={true}>
-        <SortwareLogo
-          width={"18rem"}
-          color={"rgb(38, 132, 255)"}
-        ></SortwareLogo>
+        <Button type={"link"} onClick={resetRoute}>
+          <SortwareLogo
+            width={"18rem"}
+            color={"rgb(38, 132, 255)"}
+          ></SortwareLogo>
+        </Button>
         <h2>项目</h2>
         <h2>用户名</h2>
       </HeaderLeft>
@@ -81,15 +87,20 @@ function PageHeader() {
   );
 }
 function Main() {
-  const [params, setParams] = useState({
-    personId: "",
-    name: "",
-  });
+  // const [, setParams] = useState({
+  //   personId: "",
+  //   name: "",
+  // });
+  const [params, setParams] = useUrlQueryParams(["name", "personId"]);
   const debounceParams = useDebounce(params, 1000);
   // const [projectList, setProjectList] = useState([]);
   // const [users, setUsers] = useState([]);
   const { data: projectList, isRuning } = useProject(debounceParams);
   const { data: users } = useUsers();
+  // https://codesandbox.io/s/keen-wave-tlz9s?file=/src/App.js:110-186
+  // 当obj是基本类型的时候，就不会无限循环
+  // 当 obj是对象的时候，就会无限循环
+  // 当 obj 是对象的state时，不会无限循环
   useEffect(() => {
     // run(PList("/projects", { data: deleteObjEmptyProperty(debounceParams)}))
     /*PList("/projects", { data: deleteObjEmptyProperty(debounceParams) }).then(
@@ -104,6 +115,8 @@ function Main() {
         });*/
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceParams]);
+  // let searchParams = useUrlQueryParams(['name'])
+  // console.log(searchParams)
   return (
     <Content>
       <h1>项目列表</h1>
@@ -116,6 +129,7 @@ function Main() {
     </Content>
   );
 }
+Main.whyDidYouRender = true;
 export default ProjectListPage;
 const Container = styled.div`
   display: grid;
