@@ -40,7 +40,7 @@ function SearchPanel({ params, setParams, users }: searchPanelProps) {
           <Option value="">负责人</Option>
           {users.map((item) => {
             return (
-              <Option value={item.id} key={item.id}>
+              <Option value={String(item.id)} key={item.id}>
                 {item.name}
               </Option>
             );

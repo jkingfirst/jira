@@ -6,3 +6,4 @@ export interface user {
   organization: string;
   token: string;
 }
+export type raw = string | number;
