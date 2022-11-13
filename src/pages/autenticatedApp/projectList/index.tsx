@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import SearchPanel from "./components/searchPanel/index";
 import TableList from "./components/tablelist/index";
 import styled from "@emotion/styled";
@@ -92,7 +92,10 @@ function Main() {
   //   name: "",
   // });
   const [params, setParams] = useUrlQueryParams(["name", "personId"]);
-  const debounceParams = useDebounce(params, 1000);
+  const urlParams = useMemo(() => {
+    return { ...params, personId: Number(params.personId) || undefined };
+  }, [params]);
+  const debounceParams = useDebounce(urlParams, 1000);
   // const [projectList, setProjectList] = useState([]);
   // const [users, setUsers] = useState([]);
   const { data: projectList, isRuning } = useProject(debounceParams);
@@ -120,7 +123,11 @@ function Main() {
   return (
     <Content>
       <h1>项目列表</h1>
-      <SearchPanel users={users || []} params={params} setParams={setParams} />
+      <SearchPanel
+        users={users || []}
+        params={urlParams}
+        setParams={setParams}
+      />
       <TableList
         loading={isRuning}
         dataSource={projectList || []}

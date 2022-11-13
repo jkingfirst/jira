@@ -5,23 +5,33 @@ import { TableProps } from "antd/es/table";
 import ProjectPage from "pages/autenticatedApp/project/project";
 // react-router-dom 和react 关系类似 react 和react-dom类似
 import { Link } from "react-router-dom";
-export interface Project {
-  id: string;
-  name: string;
-  personId: string;
-  organization: string;
-  created: number;
-}
+import { Project } from "types/project";
+import { Star } from "component/star";
+import { useEditProject } from "utils/project";
 interface tabList extends TableProps<Project> {
   users: user[];
 }
 function TableList({ users, ...props }: tabList) {
   //  let { path, url } = useRouteMatch(); Router v5
+  const { mutate } = useEditProject();
+  // const editProject = (id:number,pin:boolean) => => mutate({id,pin})
+  const editProject = (id: number) => (pin: boolean) => mutate({ id, pin }); // 函数柯里化 处理多个参数时候使用
   return (
     <>
       <Table
         {...props}
         columns={[
+          {
+            title: <Star checked={true} />,
+            render: (value, params) => {
+              return (
+                <Star
+                  checked={params.pin}
+                  change={(pin) => editProject(params.id)}
+                />
+              );
+            },
+          },
           {
             title: "名称",
             dataIndex: "name",
