@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useUnmountedRef } from "./tools";
 
 interface State<D> {
   stat: "idle" | "runing" | "success" | "error";
@@ -13,6 +14,8 @@ const defaultState: State<null> = {
 export const useAsync = <D>(initialState?: State<D>) => {
   const config = { ...defaultState, ...initialState };
   const [state, setState] = useState<State<D>>(config);
+  const [refresh, setRefresh] = useState(() => () => {});
+  const unmounted = useUnmountedRef();
   const setData = (data: D) =>
     setState({
       data: data,
@@ -25,15 +28,27 @@ export const useAsync = <D>(initialState?: State<D>) => {
       error: error,
       stat: "error",
     });
-  const run = (promise: Promise<D>) => {
+  const run = (
+    promise: Promise<D>,
+    runConfig?: { refresh: () => Promise<D> }
+  ) => {
+    console.log(1234);
     if (!promise || !promise.then) {
       throw new Error("请传入Promise对象");
     }
     setState({ ...state, stat: "runing" });
+    setRefresh(() => () => {
+      console.log("运行run promise");
+      if (runConfig?.refresh) {
+        run(runConfig?.refresh(), runConfig);
+      }
+    });
     return promise
       .then((res) => {
-        setData(res);
-        return res;
+        if (unmounted) {
+          setData(res);
+          return res;
+        }
       })
       .catch((err) => {
         setError(err);
@@ -49,6 +64,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
     setData,
     setError,
     run,
+    refresh,
     ...state,
   };
   return obj;

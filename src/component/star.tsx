@@ -9,7 +9,9 @@ export const Star = ({ checked, change, ...restProps }: starProps) => {
     <Rate
       count={1}
       value={checked ? 1 : 0}
-      onChange={(value) => change?.(!!value)}
+      onChange={(value) => {
+        change?.(!!value);
+      }}
       {...restProps}
     />
   );

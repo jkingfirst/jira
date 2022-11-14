@@ -10,12 +10,14 @@ import { Star } from "component/star";
 import { useEditProject } from "utils/project";
 interface tabList extends TableProps<Project> {
   users: user[];
+  refresh?: () => void;
 }
 function TableList({ users, ...props }: tabList) {
   //  let { path, url } = useRouteMatch(); Router v5
   const { mutate } = useEditProject();
   // const editProject = (id:number,pin:boolean) => => mutate({id,pin})
-  const editProject = (id: number) => (pin: boolean) => mutate({ id, pin }); // 函数柯里化 处理多个参数时候使用
+  const editProject = (id: number) => (pin: boolean) =>
+    mutate({ id, pin }).then(() => props.refresh?.()); // 函数柯里化 处理多个参数时候使用
   return (
     <>
       <Table
@@ -25,10 +27,7 @@ function TableList({ users, ...props }: tabList) {
             title: <Star checked={true} />,
             render: (value, params) => {
               return (
-                <Star
-                  checked={params.pin}
-                  change={(pin) => editProject(params.id)}
-                />
+                <Star checked={params.pin} change={editProject(params.id)} />
               );
             },
           },

@@ -6,8 +6,12 @@ import { Project } from "types/project";
 export const useProject = (params: Partial<Project>) => {
   const { run, ...result } = useAsync<Project[]>();
   const PList = useHttp();
+  const getPromise = () =>
+    PList("/projects", { data: deleteObjEmptyProperty(params) });
   useEffect(() => {
-    run(PList("/projects", { data: deleteObjEmptyProperty(params) }));
+    run(getPromise(), {
+      refresh: getPromise,
+    });
   }, [params]);
   return result;
 };
@@ -15,9 +19,10 @@ export const useEditProject = () => {
   const { run, ...asyncResult } = useAsync();
   const edit = useHttp();
   const mutate = (params: Partial<Project>) => {
-    run(
-      edit(`projects/${params.id}`, {
-        method: "PATH",
+    console.log("点击");
+    return run(
+      edit(`/projects/${params.id}`, {
+        method: "PATCH",
         data: params,
       })
     );

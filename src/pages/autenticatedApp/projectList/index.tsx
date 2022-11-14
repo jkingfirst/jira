@@ -98,7 +98,7 @@ function Main() {
   const debounceParams = useDebounce(urlParams, 1000);
   // const [projectList, setProjectList] = useState([]);
   // const [users, setUsers] = useState([]);
-  const { data: projectList, isRuning } = useProject(debounceParams);
+  const { data: projectList, isRuning, refresh } = useProject(debounceParams);
   const { data: users } = useUsers();
   // https://codesandbox.io/s/keen-wave-tlz9s?file=/src/App.js:110-186
   // 当obj是基本类型的时候，就不会无限循环
@@ -130,6 +130,7 @@ function Main() {
       />
       <TableList
         loading={isRuning}
+        refresh={refresh}
         dataSource={projectList || []}
         users={users || []}
       />

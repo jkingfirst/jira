@@ -22,7 +22,7 @@ export async function http(
   let httpUrl = "";
   if (setting.method.toUpperCase() === "GET") {
     httpUrl = `${BASE_API_URL}${url}?${qs.stringify(data)}`;
-  } else if (setting.method.toUpperCase() === "POST") {
+  } else {
     httpUrl = `${BASE_API_URL}${url}`;
     setting["body"] = JSON.stringify(data);
   }

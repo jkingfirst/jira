@@ -65,3 +65,14 @@ export const useDocumentTitle = (title: string, keepUnMounted = true) => {
 export const resetRoute = () => {
   window.location.href = window.location.origin;
 };
+
+export const useUnmountedRef = () => {
+  const unmounted = useRef(false);
+  useEffect(() => {
+    unmounted.current = true;
+    return () => {
+      unmounted.current = false;
+    };
+  });
+  return unmounted.current;
+};
