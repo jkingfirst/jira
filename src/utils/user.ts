@@ -7,6 +7,6 @@ export const useUsers = (params?: Partial<user>) => {
   const PList = useHttp();
   useEffect(() => {
     run(PList("/users", {}));
-  }, []);
+  }, [run, PList]);
   return result;
 };

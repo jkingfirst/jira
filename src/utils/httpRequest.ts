@@ -1,6 +1,7 @@
 import * as qs from "qs";
 import * as auth from "auth-provider";
 import { useAuth } from "../context/auth-context";
+import { useCallback } from "react";
 
 let BASE_API_URL = process.env.REACT_APP_API_URL;
 interface config extends RequestInit {
@@ -46,7 +47,10 @@ export async function http(
 }
 export const useHttp = () => {
   let { user } = useAuth();
-  return (url: string, config: config) => {
-    return http(url, { ...config, token: user?.token });
-  };
+  return useCallback(
+    (url: string, config: config) => {
+      return http(url, { ...config, token: user?.token });
+    },
+    [user?.token]
+  );
 };

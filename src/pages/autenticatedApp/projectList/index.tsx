@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import SearchPanel from "./components/searchPanel/index";
 import TableList from "./components/tablelist/index";
 import styled from "@emotion/styled";
@@ -104,20 +104,20 @@ function Main() {
   // 当obj是基本类型的时候，就不会无限循环
   // 当 obj是对象的时候，就会无限循环
   // 当 obj 是对象的state时，不会无限循环
-  useEffect(() => {
-    // run(PList("/projects", { data: deleteObjEmptyProperty(debounceParams)}))
-    /*PList("/projects", { data: deleteObjEmptyProperty(debounceParams) }).then(
-          (res) => {
-            setProjectList(res);
-          }
-        ).catch(err=>{
-            setProjectList([])
-            message.error(err.message)
-        }).finally(()=>{
-          setLoading(false)
-        });*/
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounceParams]);
+  // useEffect(() => {
+  //   // run(PList("/projects", { data: deleteObjEmptyProperty(debounceParams)}))
+  //   /*PList("/projects", { data: deleteObjEmptyProperty(debounceParams) }).then(
+  //         (res) => {
+  //           setProjectList(res);
+  //         }
+  //       ).catch(err=>{
+  //           setProjectList([])
+  //           message.error(err.message)
+  //       }).finally(()=>{
+  //         setLoading(false)
+  //       });*/
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [debounceParams]);
   // let searchParams = useUrlQueryParams(['name'])
   // console.log(searchParams)
   return (

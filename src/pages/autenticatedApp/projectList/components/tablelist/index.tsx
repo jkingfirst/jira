@@ -2,7 +2,6 @@ import { user } from "types/user";
 import { Table } from "antd";
 import dayjs from "dayjs";
 import { TableProps } from "antd/es/table";
-import ProjectPage from "pages/autenticatedApp/project/project";
 // react-router-dom 和react 关系类似 react 和react-dom类似
 import { Link } from "react-router-dom";
 import { Project } from "types/project";

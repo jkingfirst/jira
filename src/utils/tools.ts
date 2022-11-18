@@ -74,5 +74,5 @@ export const useUnmountedRef = () => {
       unmounted.current = false;
     };
   });
-  return unmounted.current;
+  return unmounted;
 };
