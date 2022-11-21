@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useState } from "react";
 import { useUnmountedRef } from "./tools";
 
 interface State<D> {
@@ -11,26 +11,14 @@ const defaultState: State<null> = {
   data: null,
   error: null,
 };
-const asyncReducer = <D>(state: State<D>, action: Partial<State<D>>) => {
-  return { ...state, ...action };
-};
-interface AsyncReducer {
-  <D>(state: State<D>, action: Partial<State<D>>): { key: string };
-}
 export const useAsync = <D>(initialState?: State<D>) => {
   const config = { ...defaultState, ...initialState };
-  // const [state, setState] = useState<State<D>>(config);
-  const [state, dispatch] = useReducer(
-    (state: State<D>, action: Partial<State<D>>) => {
-      return { ...state, ...action };
-    },
-    config
-  );
+  const [state, setState] = useState<State<D>>(config);
   const [refresh, setRefresh] = useState(() => () => {});
   const unmounted = useUnmountedRef();
   const setData = useCallback(
     (data: D) =>
-      dispatch({
+      setState({
         data: data,
         error: null,
         stat: "success",
@@ -39,7 +27,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
   );
   const setError = useCallback(
     (error: Error) =>
-      dispatch({
+      setState({
         data: null,
         error: error,
         stat: "error",
@@ -52,10 +40,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
       if (!promise || !promise.then) {
         throw new Error("请传入Promise对象");
       }
-      dispatch({
-        ...state,
-        stat: "runing",
-      });
+      setState((preState) => ({ ...preState, stat: "runing" }));
       setRefresh(() => () => {
         console.log("运行run promise");
         if (runConfig?.refresh) {
