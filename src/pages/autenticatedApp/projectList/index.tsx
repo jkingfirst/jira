@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import SearchPanel from "./components/searchPanel/index";
 import TableList from "./components/tablelist/index";
+import { CreateProjectModal } from "./components/createProjectModal/createProjectModal";
 import styled from "@emotion/styled";
 import { Row } from "component/libStyle";
 import { Button, Menu, Dropdown } from "antd";
@@ -13,9 +14,12 @@ import { resetRoute, useDebounce } from "utils/tools";
 // import {Helmet} from 'react-helmet'
 import { useDocumentTitle } from "utils/tools";
 import ProjectPage from "pages/autenticatedApp/project/project";
+import { ProjectPopover } from "component/projectPopover/projectPopover";
 import { Routes, Route, Navigate } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { useUrlQueryParams } from "utils/url";
+import { useAppDispatch } from "store";
+import { projectListActions } from "store/projectList/projectListSlice";
 function ProjectListPage() {
   useDocumentTitle("项目列表", false);
   // useEffect(() => {
@@ -52,10 +56,30 @@ function ProjectListPage() {
           <Navigate to={"/projects"} />
         </Routes>
       </Router>
+      <CreateProjectModal title={"创建项目"} />
     </Container>
   );
 }
 function PageHeader() {
+  return (
+    <Header>
+      <HeaderLeft gap={true}>
+        <Button style={{ padding: 0 }} type={"link"} onClick={resetRoute}>
+          <SortwareLogo
+            width={"18rem"}
+            color={"rgb(38, 132, 255)"}
+          ></SortwareLogo>
+        </Button>
+        <ProjectPopover />
+        <span>用户名</span>
+      </HeaderLeft>
+      <HeaderRight>
+        <LoginOut />
+      </HeaderRight>
+    </Header>
+  );
+}
+function LoginOut() {
   const { user, logout } = useAuth();
   const menu = (
     <Menu>
@@ -67,23 +91,9 @@ function PageHeader() {
     </Menu>
   );
   return (
-    <Header>
-      <HeaderLeft gap={true}>
-        <Button type={"link"} onClick={resetRoute}>
-          <SortwareLogo
-            width={"18rem"}
-            color={"rgb(38, 132, 255)"}
-          ></SortwareLogo>
-        </Button>
-        <h2>项目</h2>
-        <h2>用户名</h2>
-      </HeaderLeft>
-      <HeaderRight>
-        <Dropdown overlay={menu}>
-          <Button type={"link"}>Hi:{user?.name}</Button>
-        </Dropdown>
-      </HeaderRight>
-    </Header>
+    <Dropdown overlay={menu}>
+      <Button type={"link"}>Hi:{user?.name}</Button>
+    </Dropdown>
   );
 }
 function Main() {
@@ -91,6 +101,7 @@ function Main() {
   //   personId: "",
   //   name: "",
   // });
+  const disPatch = useAppDispatch();
   const [params, setParams] = useUrlQueryParams(["name", "personId"]);
   const urlParams = useMemo(() => {
     return { ...params, personId: Number(params.personId) || undefined };
@@ -122,7 +133,15 @@ function Main() {
   // console.log(searchParams)
   return (
     <Content>
-      <h1>项目列表</h1>
+      <Row between={true}>
+        <h1>项目列表</h1>
+        <Button
+          type={"link"}
+          onClick={() => disPatch(projectListActions.openProjectModal())}
+        >
+          创建项目
+        </Button>
+      </Row>
       <SearchPanel
         users={users || []}
         params={urlParams}
