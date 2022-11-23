@@ -11,12 +11,6 @@ const defaultState: State<null> = {
   data: null,
   error: null,
 };
-const asyncReducer = <D>(state: State<D>, action: Partial<State<D>>) => {
-  return { ...state, ...action };
-};
-interface AsyncReducer {
-  <D>(state: State<D>, action: Partial<State<D>>): { key: string };
-}
 export const useAsync = <D>(initialState?: State<D>) => {
   const config = { ...defaultState, ...initialState };
   // const [state, setState] = useState<State<D>>(config);

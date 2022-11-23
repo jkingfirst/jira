@@ -1,28 +1,20 @@
-import React from "react";
+import React, { useCallback } from "react";
 import * as auth from "auth-provider";
 import { user } from "types/user";
 import { ReactNode } from "react";
 import { useMount } from "../utils/tools";
 import { http } from "../utils/httpRequest";
-import { message } from "antd";
 import { useAsync } from "../utils/useAsync";
 import { FullPageLoading, FullPageError } from "component/libStyle";
 import { DevTools } from "jira-dev-tool";
-const AuthContext = React.createContext<
-  | {
-      user: user | null;
-      login: (data: formData) => Promise<void>;
-      register: (data: formData) => Promise<void>;
-      logout: () => Promise<void>;
-    }
-  | undefined
->(undefined);
-AuthContext.displayName = "AuthContext";
-interface formData {
+import * as authStore from "store/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../store";
+import { useDispatch } from "react-redux";
+export interface formData {
   username: string;
   password: string;
 }
-async function initUser() {
+export const initUser = async () => {
   let user = null;
   let token = auth.getToken();
   if (token) {
@@ -30,44 +22,19 @@ async function initUser() {
     user = data.user;
   }
   return user;
-}
+};
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const {
-    error,
-    data: user,
-    run,
-    isIdle,
-    isRuning,
-    isError,
-    setData: setUser,
-  } = useAsync<user | null>();
+  const { error, run, isIdle, isRuning, isError } = useAsync<user | null>();
   // const [user, setUser] = useState<user | null>(null);
-  const login = (data: formData) =>
-    auth
-      .login(data)
-      .then((data) => {
-        setUser(data.user);
-      })
-      .catch((err) => {
-        message.error(err.message);
-      });
-  const register = (data: formData) =>
-    auth
-      .register(data)
-      .then((data) => {
-        setUser(data.user);
-      })
-      .catch((err) => {
-        message.error(err.message);
-      });
-  const logout = () => auth.logout().then(() => setUser(null));
+
+  const dispatch: (...args: unknown[]) => Promise<user> = useAppDispatch(); // 必须显性的给dispath指定返回类型，否则报错
   useMount(() => {
     // initUser().then((user) => {
     //   setUser(user);
     // }).catch(err=>{
     //   console.log(err)
     // });
-    run(initUser());
+    run(dispatch(authStore.init()));
   });
   if (isIdle || isRuning) {
     return <FullPageLoading></FullPageLoading>;
@@ -80,17 +47,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       </>
     );
   }
-  return (
-    <AuthContext.Provider
-      children={children}
-      value={{ user, login, register, logout }}
-    />
-  );
+  return <div>{children}</div>;
 };
 export const useAuth = () => {
-  const context = React.useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth必须在AppProvider使用");
-  }
-  return context;
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
+  const login = useCallback(
+    (from: formData) => dispatch(authStore.login(from)),
+    [dispatch]
+  );
+  const logout = useCallback(() => dispatch(authStore.logout()), [dispatch]);
+  const register = useCallback(
+    (from: formData) => dispatch(authStore.register(from)),
+    [dispatch]
+  );
+  return {
+    user,
+    login,
+    logout,
+    register,
+  };
 };
