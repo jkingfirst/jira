@@ -3,11 +3,11 @@ import { deleteObjEmptyProperty } from "./tools";
 import { useAsync } from "./useAsync";
 import { useHttp } from "./httpRequest";
 import { Project } from "types/project";
-export const useProject = (params: Partial<Project>) => {
+export const useProject = (params?: Partial<Project>) => {
   const { run, ...result } = useAsync<Project[]>();
   const PList = useHttp();
   const getPromise = useCallback(
-    () => PList("/projects", { data: deleteObjEmptyProperty(params) }),
+    () => PList("/projects", { data: deleteObjEmptyProperty(params || {}) }),
     [PList, params]
   );
   useEffect(() => {

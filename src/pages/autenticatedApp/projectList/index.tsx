@@ -16,6 +16,8 @@ import ProjectPage from "pages/autenticatedApp/project/project";
 import { Routes, Route, Navigate } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { useUrlQueryParams } from "utils/url";
+import { CreateProjectModal } from "./components/CreateProjectModal/CreateProjectModal";
+import { ProjectPopover } from "../../../component/projectPopover/projectPopover";
 function ProjectListPage() {
   useDocumentTitle("项目列表", false);
   // useEffect(() => {
@@ -32,8 +34,8 @@ function ProjectListPage() {
       {/*<Helmet>
             <title>任务列表</title>
         </Helmet>*/}
-      <PageHeader></PageHeader>
       <Router>
+        <PageHeader></PageHeader>
         {/*升级react-router v5到v6*/}
         {/*<Switch>
           <Route exact path={"/projects"}>
@@ -51,6 +53,7 @@ function ProjectListPage() {
           <Route path={"/projects/:projectId/*"} element={<ProjectPage />} />
           <Navigate to={"/projects"} />
         </Routes>
+        <CreateProjectModal />
       </Router>
     </Container>
   );
@@ -69,14 +72,14 @@ function PageHeader() {
   return (
     <Header>
       <HeaderLeft gap={true}>
-        <Button type={"link"} onClick={resetRoute}>
+        <Button type={"link"} onClick={resetRoute} style={{ padding: 0 }}>
           <SortwareLogo
             width={"18rem"}
             color={"rgb(38, 132, 255)"}
           ></SortwareLogo>
         </Button>
-        <h2>项目</h2>
-        <h2>用户名</h2>
+        <ProjectPopover />
+        <span>用户名</span>
       </HeaderLeft>
       <HeaderRight>
         <Dropdown overlay={menu}>

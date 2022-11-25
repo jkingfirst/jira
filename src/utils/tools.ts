@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useUrlQueryParams } from "./url";
 export const isFalse = (val: unknown) => {
   // unknown 可以代替any,却能有严格的限制 unknown不能赋值给任何变量
   return val === 0 ? false : !val;
@@ -75,4 +76,16 @@ export const useUnmountedRef = () => {
     };
   });
   return unmounted;
+};
+export const useCreateModal = () => {
+  const [{ createProject }, setCreateProject] = useUrlQueryParams([
+    "createProject",
+  ]);
+  const open = () => setCreateProject({ createProject: true });
+  const close = () => setCreateProject({ createProject: false });
+  return {
+    createProjectOpen: createProject === "true",
+    open,
+    close,
+  } as const;
 };
