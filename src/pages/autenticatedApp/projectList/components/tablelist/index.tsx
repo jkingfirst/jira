@@ -1,5 +1,5 @@
 import { user } from "types/user";
-import { Table } from "antd";
+import { Button, Dropdown, Menu, Table } from "antd";
 import dayjs from "dayjs";
 import { TableProps } from "antd/es/table";
 // react-router-dom 和react 关系类似 react 和react-dom类似
@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Project } from "types/project";
 import { Star } from "component/star";
 import { useEditProject } from "utils/project";
+import { useCreateModal } from "../../../../../utils/tools";
 interface tabList extends TableProps<Project> {
   users: user[];
   refresh?: () => void;
@@ -16,7 +17,9 @@ function TableList({ users, ...props }: tabList) {
   const { mutate } = useEditProject();
   // const editProject = (id:number,pin:boolean) => => mutate({id,pin})
   const editProject = (id: number) => (pin: boolean) =>
-    mutate({ id, pin }).then(() => props.refresh?.()); // 函数柯里化 处理多个参数时候使用
+    // mutate({ id, pin }).then(() => props.refresh?.()); // 函数柯里化 处理多个参数时候使用 useAsync
+    mutate({ id, pin });
+  const { setProjectID, open } = useCreateModal();
   return (
     <>
       <Table
@@ -66,6 +69,39 @@ function TableList({ users, ...props }: tabList) {
                 <span>
                   {row.created ? dayjs(row.created).format("YYYY-MM-DD") : "-"}
                 </span>
+              );
+            },
+          },
+          {
+            title: "操作",
+            render: (value, data) => {
+              return (
+                <Dropdown
+                  overlay={
+                    <Menu>
+                      <Menu.Item
+                        key={"编辑"}
+                        onClick={() => {
+                          // open()
+                          setProjectID(data.id);
+                        }}
+                      >
+                        编辑
+                      </Menu.Item>
+                      <Menu.Item
+                        key={"删除"}
+                        onClick={() => {
+                          open();
+                          setProjectID(data.personId);
+                        }}
+                      >
+                        删除
+                      </Menu.Item>
+                    </Menu>
+                  }
+                >
+                  <Button type={"link"}>...</Button>
+                </Dropdown>
               );
             },
           },
