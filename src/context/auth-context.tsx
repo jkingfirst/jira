@@ -8,6 +8,7 @@ import { message } from "antd";
 import { useAsync } from "../utils/useAsync";
 import { FullPageLoading, FullPageError } from "component/libStyle";
 import { DevTools } from "jira-dev-tool";
+import { useQueryClient } from "react-query";
 const AuthContext = React.createContext<
   | {
       user: user | null;
@@ -32,6 +33,7 @@ async function initUser() {
   return user;
 }
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const queryClient = useQueryClient();
   const {
     error,
     data: user,
@@ -60,7 +62,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .catch((err) => {
         message.error(err.message);
       });
-  const logout = () => auth.logout().then(() => setUser(null));
+  const logout = () =>
+    auth.logout().then(() => {
+      setUser(null);
+      queryClient.clear();
+    });
   useMount(() => {
     // initUser().then((user) => {
     //   setUser(user);

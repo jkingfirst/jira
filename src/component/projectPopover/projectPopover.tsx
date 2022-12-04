@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Divider, List, Popover, Typography, Button } from "antd";
 import { useProject } from "utils/project";
 import styled from "@emotion/styled";
-import { useCreateModal } from "utils/tools";
+import { useCreateModal } from "../../pages/autenticatedApp/projectList/util";
 const { Text } = Typography;
 export const ProjectPopover = () => {
   const { open } = useCreateModal();

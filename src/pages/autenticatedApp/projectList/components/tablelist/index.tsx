@@ -1,20 +1,25 @@
 import { user } from "types/user";
-import { Button, Dropdown, Menu, Table } from "antd";
+import { Button, Dropdown, Menu, Modal, Table } from "antd";
 import dayjs from "dayjs";
 import { TableProps } from "antd/es/table";
 // react-router-dom 和react 关系类似 react 和react-dom类似
 import { Link } from "react-router-dom";
 import { Project } from "types/project";
 import { Star } from "component/star";
-import { useEditProject } from "utils/project";
-import { useCreateModal } from "../../../../../utils/tools";
+import { useDeleteProject, useEditProject } from "utils/project";
+import {
+  useCreateModal,
+  useProjectQueryKey,
+  useProjectSearchParams,
+} from "../../util";
 interface tabList extends TableProps<Project> {
   users: user[];
   refresh?: () => void;
 }
 function TableList({ users, ...props }: tabList) {
   //  let { path, url } = useRouteMatch(); Router v5
-  const { mutate } = useEditProject();
+  const queryKey = useProjectQueryKey();
+  const { mutate } = useEditProject(queryKey);
   // const editProject = (id:number,pin:boolean) => => mutate({id,pin})
   const editProject = (id: number) => (pin: boolean) =>
     // mutate({ id, pin }).then(() => props.refresh?.()); // 函数柯里化 处理多个参数时候使用 useAsync
@@ -75,34 +80,7 @@ function TableList({ users, ...props }: tabList) {
           {
             title: "操作",
             render: (value, data) => {
-              return (
-                <Dropdown
-                  overlay={
-                    <Menu>
-                      <Menu.Item
-                        key={"编辑"}
-                        onClick={() => {
-                          // open()
-                          setProjectID(data.id);
-                        }}
-                      >
-                        编辑
-                      </Menu.Item>
-                      <Menu.Item
-                        key={"删除"}
-                        onClick={() => {
-                          open();
-                          setProjectID(data.personId);
-                        }}
-                      >
-                        删除
-                      </Menu.Item>
-                    </Menu>
-                  }
-                >
-                  <Button type={"link"}>...</Button>
-                </Dropdown>
-              );
+              return <More project={data} />;
             },
           },
         ]}
@@ -112,3 +90,51 @@ function TableList({ users, ...props }: tabList) {
   );
 }
 export default TableList;
+const More = ({ project }: { project: Project }) => {
+  const queryKey = useProjectQueryKey();
+  const { mutate } = useEditProject(queryKey);
+  const { mutate: delMutate } = useDeleteProject(queryKey);
+  // const editProject = (id:number,pin:boolean) => => mutate({id,pin})
+  const editProject = (id: number) => (pin: boolean) =>
+    // mutate({ id, pin }).then(() => props.refresh?.()); // 函数柯里化 处理多个参数时候使用 useAsync
+    mutate({ id, pin });
+  const delProject = (id: number) => delMutate({ id });
+  const { setProjectID, open } = useCreateModal();
+  const confirmDeleteProjectModal = (id: number) => {
+    Modal.confirm({
+      title: "温馨提示",
+      content: "确定要删除该项目",
+      okText: "确定",
+      cancelText: "取消",
+      onOk: () => {
+        delProject(id);
+      },
+    });
+  };
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item
+            key={"编辑"}
+            onClick={() => {
+              setProjectID(project.id);
+            }}
+          >
+            编辑
+          </Menu.Item>
+          <Menu.Item
+            key={"删除"}
+            onClick={() => {
+              confirmDeleteProjectModal(project.id);
+            }}
+          >
+            删除
+          </Menu.Item>
+        </Menu>
+      }
+    >
+      <Button type={"link"}>...</Button>
+    </Dropdown>
+  );
+};

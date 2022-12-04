@@ -22,3 +22,13 @@ export const useUrlQueryParams = <k extends string>(keys: k[]) => {
     },
   ] as const;
 };
+export const useSetSearchParams = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  return (params: { [k in string]: unknown }) => {
+    const o = deleteObjEmptyProperty({
+      ...Object.entries(searchParams),
+      ...params,
+    }) as URLSearchParamsInit;
+    return setSearchParams(o);
+  };
+};

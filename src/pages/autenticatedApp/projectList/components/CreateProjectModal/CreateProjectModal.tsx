@@ -1,16 +1,17 @@
 /* @jsxImportSource @emotion/react */
 import { Button, Drawer, Form, Input, Spin } from "antd";
-import { useCreateModal } from "utils/tools";
 import UserSelect from "component/UserSelect/UserSelect";
 import { useAddProject, useEditProject } from "utils/project";
 import { useEffect } from "react";
 import styled from "@emotion/styled";
+import { useCreateModal, useProjectQueryKey } from "../../util";
 
 export const CreateProjectModal = () => {
   const { createProjectOpen, close, editProject, isLoading } = useCreateModal();
   const useProjectMutate = editProject ? useEditProject : useAddProject;
   const title = editProject ? "编辑项目" : "创建项目";
-  const { mutateAsync } = useProjectMutate();
+  const querykey = useProjectQueryKey();
+  const { mutateAsync } = useProjectMutate(querykey);
   const a = () => {
     console.log("点击了");
   };

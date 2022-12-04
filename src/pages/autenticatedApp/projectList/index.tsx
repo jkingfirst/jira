@@ -18,6 +18,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { useUrlQueryParams } from "utils/url";
 import { CreateProjectModal } from "./components/CreateProjectModal/CreateProjectModal";
 import { ProjectPopover } from "../../../component/projectPopover/projectPopover";
+import { useCreateModal } from "./util";
 function ProjectListPage() {
   useDocumentTitle("项目列表", false);
   // useEffect(() => {
@@ -103,6 +104,7 @@ function Main() {
   // const [users, setUsers] = useState([]);
   const { data: projectList, isLoading } = useProject(debounceParams);
   const { data: users } = useUsers();
+  const { open } = useCreateModal();
   // https://codesandbox.io/s/keen-wave-tlz9s?file=/src/App.js:110-186
   // 当obj是基本类型的时候，就不会无限循环
   // 当 obj是对象的时候，就会无限循环
@@ -125,7 +127,12 @@ function Main() {
   // console.log(searchParams)
   return (
     <Content>
-      <h1>项目列表</h1>
+      <Row between={true}>
+        <h1>项目列表</h1>{" "}
+        <Button type={"link"} onClick={open}>
+          创建项目
+        </Button>
+      </Row>
       <SearchPanel
         users={users || []}
         params={urlParams}

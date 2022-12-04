@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { useUrlQueryParams } from "./url";
-import { useGetSingleProject } from "./project";
+import { useEffect, useRef, useState } from "react";
+
 export const isFalse = (val: unknown) => {
   // unknown 可以代替any,却能有严格的限制 unknown不能赋值给任何变量
   return val === 0 ? false : !val;
@@ -77,30 +76,4 @@ export const useUnmountedRef = () => {
     };
   });
   return unmounted;
-};
-export const useCreateModal = () => {
-  const [{ createProject }, setCreateProject] = useUrlQueryParams([
-    "createProject",
-  ]);
-  const [{ editProjectId }, setEditProjectId] = useUrlQueryParams([
-    "editProjectId",
-  ]);
-  const open = () => setCreateProject({ createProject: true });
-  const close = () => {
-    setCreateProject({ createProject: undefined });
-    setEditProjectId({ editProjectId: undefined });
-  };
-  const { data: editProject, isLoading } = useGetSingleProject(
-    Number(editProjectId)
-  );
-  const setProjectID = (id: number) => setEditProjectId({ editProjectId: id });
-  return {
-    createProjectOpen: createProject === "true" || Boolean(editProjectId),
-    editProjectId,
-    open,
-    close,
-    setProjectID,
-    editProject,
-    isLoading,
-  } as const;
 };
