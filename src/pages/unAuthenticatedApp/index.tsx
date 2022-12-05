@@ -14,6 +14,7 @@ export default function UnAuthenticatedApp() {
   const switchLoginOrRegister = () => {
     setIsLogin(!isLogin);
   };
+  const [err, setErr] = useState<Error | null>(null);
   useDocumentTitle("注册或登录");
   return (
     <Wrapper>

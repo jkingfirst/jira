@@ -23,7 +23,10 @@ const ProjectPage = () => {
       <Routes>
         <Route path={`kanban`} element={<KanpanPage />}></Route>
         <Route path={`taskGroups`} element={<TaskGroupsPage />}></Route>
-        <Navigate to={`${window.location.pathname}/kanban`}></Navigate>
+        <Navigate
+          to={`${window.location.pathname}/kanban`}
+          replace={true}
+        ></Navigate>
       </Routes>
     </div>
   );
