@@ -37,3 +37,9 @@ export const FullPageError = ({ error }: { error: Error | null }) => (
     <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
   </FullPage>
 );
+export const ScreenContainer = styled.div`
+  padding: 3.2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+`;

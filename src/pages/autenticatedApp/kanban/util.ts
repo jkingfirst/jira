@@ -1,9 +1,9 @@
 import { useLocation } from "react-router";
 import { useGetSingleProject } from "../../../utils/project";
 import { useKanbans } from "../../../utils/kanban";
-import { useTasks } from "../../../utils/task";
+import { useTask, useTasks } from "../../../utils/task";
 import { useUrlQueryParams } from "../../../utils/url";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 export const useProjectIdInUrl = () => {
   const { pathname } = useLocation();
@@ -32,3 +32,23 @@ export const useTaskSearchParams = () => {
   }, [params, projectId]);
 };
 export const useTaskQueryKey = () => ["tasks", useTaskSearchParams()];
+export const useTaskModal = () => {
+  const [{ taskId }, setTaskId] = useUrlQueryParams(["taskId"]);
+  const { data: editingTask, isLoading } = useTask(Number(taskId));
+  const startEdit = useCallback(
+    (id: number) => {
+      setTaskId({ taskId: id });
+    },
+    [setTaskId]
+  );
+  const close = useCallback(() => {
+    setTaskId({ taskId: "" });
+  }, [setTaskId]);
+  return {
+    startEdit,
+    close,
+    isLoading,
+    taskId,
+    editingTask,
+  };
+};
