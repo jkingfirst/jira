@@ -3,7 +3,6 @@ import { Link, Routes, Route } from "react-router-dom";
 import { Navigate, useLocation } from "react-router";
 import TaskGroupsPage from "pages/autenticatedApp/taskGroups/taskGroups";
 import KanpanPage from "pages/autenticatedApp/kanban/kanban";
-import { ScreenContainer } from "../../../component/libStyle";
 import styled from "@emotion/styled";
 import { Menu } from "antd";
 const ProjectPage = () => {
@@ -37,7 +36,7 @@ const ProjectPage = () => {
       <Main>
         <Routes>
           <Route path={`kanban`} element={<KanpanPage />}></Route>
-          <Route path={`taskGroups`} element={<TaskGroupsPage />}></Route>
+          <Route path={`epic`} element={<TaskGroupsPage />}></Route>
           <Navigate
             to={`${window.location.pathname}/kanban`}
             replace={true}
@@ -57,6 +56,7 @@ const Main = styled.div`
   box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.1);
   display: flex;
   overflow: hidden;
+  width: 100%;
 `;
 
 const Container = styled.div`

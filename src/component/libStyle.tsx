@@ -42,4 +42,5 @@ export const ScreenContainer = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;

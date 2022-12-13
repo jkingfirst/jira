@@ -33,7 +33,7 @@ export default function Login() {
       </Form.Item>
       <Form.Item labelCol={{ span: 0 }} wrapperCol={{ span: 24 }}>
         <LongButton htmlType="submit" type="primary">
-          注册1
+          注册
         </LongButton>
       </Form.Item>
     </Form>
