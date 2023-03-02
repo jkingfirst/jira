@@ -76,7 +76,7 @@
     "lint-staged": "^11.0.0",
     "prettier": "2.3.2",
     "webpack": "4.44.2",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "4"
   },
   "lint-staged": {
     "*.{js,css,md,ts,tsx}": "prettier --write"
