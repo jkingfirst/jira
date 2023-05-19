@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "./App.scss";
 // import Project from "pages/projectList/";
 // import Test from "pages/reactTest";
 import AuthenticatedApp from "pages/autenticatedApp";

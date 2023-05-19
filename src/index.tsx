@@ -1,19 +1,19 @@
 import "./wdyr";
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./index.scss";
 import App from "./App";
 import AppProvider from "context";
 import reportWebVitals from "./reportWebVitals";
 import { loadServer, DevTools } from "jira-dev-tool";
 import "antd/dist/antd.less";
-// import {BrowserRouter as Router} from 'react-router-dom'
+import AppRouter from "./router";
 loadServer(() => {
   ReactDOM.render(
     <React.StrictMode>
       <AppProvider>
         <DevTools />
-        <App />
+        <AppRouter />
       </AppProvider>
     </React.StrictMode>,
     document.getElementById("root")

@@ -13,8 +13,8 @@ import { resetRoute, useDebounce } from "utils/tools";
 // import {Helmet} from 'react-helmet'
 import { useDocumentTitle } from "utils/tools";
 import ProjectPage from "pages/autenticatedApp/project/project";
-import { Routes, Route, Navigate } from "react-router";
-import { BrowserRouter as Router } from "react-router-dom";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useUrlQueryParams } from "utils/url";
 import { CreateProjectModal } from "./components/CreateProjectModal/CreateProjectModal";
 import { ProjectPopover } from "../../../component/projectPopover/projectPopover";
@@ -50,9 +50,10 @@ function ProjectListPage() {
             <Redirect to={'/projects'}></Redirect>
         </Switch>*/}
         <Routes>
-          <Route path={"/projects"} element={<Main />} />
-          <Route path={"/projects/:projectId/*"} element={<ProjectPage />} />
-          <Navigate to={"/projects"} />
+          <Route path={"/"}>
+            <Route index element={<Main />} />
+            <Route path={"projects/:projectId/*"} element={<ProjectPage />} />
+          </Route>
         </Routes>
         <CreateProjectModal />
       </Router>

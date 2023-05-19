@@ -1,6 +1,5 @@
 // import {Link,Switch,Route,useRouteMatch,Redirect} from 'react-router-dom' router v5
-import { Link, Routes, Route } from "react-router-dom";
-import { Navigate, useLocation } from "react-router";
+import { Link, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import TaskGroupsPage from "pages/autenticatedApp/taskGroups/taskGroups";
 import KanpanPage from "pages/autenticatedApp/kanban/kanban";
 import styled from "@emotion/styled";
@@ -35,12 +34,8 @@ const ProjectPage = () => {
       </Aside>
       <Main>
         <Routes>
-          <Route path={`kanban`} element={<KanpanPage />}></Route>
-          <Route path={`epic`} element={<TaskGroupsPage />}></Route>
-          <Navigate
-            to={`${window.location.pathname}/kanban`}
-            replace={true}
-          ></Navigate>
+          <Route path={`kanban`} index element={<KanpanPage />} />
+          <Route path={`epic`} element={<TaskGroupsPage />} />
         </Routes>
       </Main>
     </Container>
