@@ -4,16 +4,14 @@ import { IRoute } from "types/router";
 const project: IRoute[] = [
   {
     path: "/projects",
-    element: <ProjectListPage />,
     label: "项目管理",
     children: [
       {
         path: "kanban",
-        element: <ProjectListPage />,
         label: "看板",
         children: [
           {
-            path: "kanban",
+            path: "task1",
             label: "任务1",
             children: [
               {

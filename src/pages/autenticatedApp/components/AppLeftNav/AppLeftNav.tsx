@@ -7,46 +7,39 @@ import {
 } from "@ant-design/icons";
 import { IRoute } from "types/router";
 import { Link, useRoutes } from "react-router-dom";
-import { routes } from "router/RouterConfig";
+import { MENUS } from "router/RouterConfig";
 
 const { Sider } = Layout;
-const items2: MenuProps["items"] = [
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-].map((icon, index) => {
-  const key = String(index + 1);
-
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1;
-      return {
-        key: subKey,
-        label: `option${subKey}`,
-      };
-    }),
-  };
-});
 
 // const menus = assemble(routes)
-function assemble(routes: IRoute[]): any {
-  const menus = routes.map((route, index) => {
-    return {
-      label: <Link to={`/${route.path}`}>{route.label}</Link>,
-      key: route.path,
-      icon: route.icon,
-      children:
-        route.children && route.children.length > 0 && assemble(route.children),
-    };
-  });
+function assemble(routes: IRoute[], basePath?: string): any {
+  const menus = routes
+    .map((route, index) => {
+      let routePath = basePath ? `${basePath}/${route.path}` : `${route.path}`;
+      console.log(routePath, "+++++");
+      return {
+        label:
+          route.children && route.children.length > 0 ? (
+            route.label
+          ) : (
+            <Link to={routePath}>{route.label}</Link>
+          ),
+        key: route.path,
+        path: route.path,
+        icon: route.icon,
+        hideInMenu: route.hideInMenu,
+        children:
+          route.children &&
+          route.children.length > 0 &&
+          assemble(route.children, routePath),
+      };
+    })
+    .filter((route) => !route.hideInMenu);
   return menus;
 }
 export default function AppLeftNav() {
-  const items = assemble(routes);
+  const items = assemble(MENUS);
+  console.log(items);
   return (
     <Sider width={200} className="site-layout-background">
       <Menu

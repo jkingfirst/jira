@@ -3,13 +3,13 @@ import { ReactNode } from "react";
 
 export type IRoute = Omit<RouteObject, "children" | "index"> & {
   label?: string; // 导航名称
-  children?: IRoute[];
   icon?: ReactNode; // 导航图标
-  isFullScreen?: boolean; // 是否是全屏页面
+  hideInMenu?: boolean; // 是否显示
+  children?: IRoute[];
 };
 interface A {
+  label: number;
   index: true;
-  label: string;
   c: number;
 }
 interface B {
@@ -18,4 +18,17 @@ interface B {
   c: number;
 }
 export type AB = A | B;
-type C = Omit<AB, "index" | "label">;
+type C = Omit<AB, "label"> & {
+  label?: boolean;
+};
+const c: C = {
+  label: false,
+  c: 1,
+};
+interface Pro {
+  name: string;
+}
+interface Ta {
+  name: number;
+}
+type MM = Pro & Ta;

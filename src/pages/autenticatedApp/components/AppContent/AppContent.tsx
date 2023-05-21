@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout } from "antd";
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 const { Content } = Layout;
 export default function AppContent() {
   return (
@@ -12,6 +12,7 @@ export default function AppContent() {
         minHeight: 280,
       }}
     >
+      hello word
       <Outlet />
     </Content>
   );

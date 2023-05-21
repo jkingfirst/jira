@@ -35,10 +35,9 @@ function ProjectListPage() {
       {/*<Helmet>
             <title>任务列表</title>
         </Helmet>*/}
-      <Router>
-        <PageHeader></PageHeader>
-        {/*升级react-router v5到v6*/}
-        {/*<Switch>
+      {/*<PageHeader></PageHeader>*/}
+      {/*升级react-router v5到v6*/}
+      {/*<Switch>
           <Route exact path={"/projects"}>
             {" "}
             <Main />
@@ -49,14 +48,8 @@ function ProjectListPage() {
           </Route>
             <Redirect to={'/projects'}></Redirect>
         </Switch>*/}
-        <Routes>
-          <Route path={"/"}>
-            <Route index element={<Main />} />
-            <Route path={"projects/:projectId/*"} element={<ProjectPage />} />
-          </Route>
-        </Routes>
-        <CreateProjectModal />
-      </Router>
+      <Main />
+      <CreateProjectModal />
     </Container>
   );
 }
