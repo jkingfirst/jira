@@ -5,18 +5,25 @@ import AppLeftNav from "../AppLeftNav/AppLeftNav";
 import AppContent from "../AppContent/AppContent";
 import AppFooter from "../AppFooter/AppFooter";
 import AppBreadCrumb from "../AppBreadCrumb/AppBreadCrumb";
+import styled from "@emotion/styled";
 const AppLayout: React.FC = () => (
-  <Layout>
-    <AppHeader />
+  <LayoutContainer>
     <Layout>
-      <AppLeftNav />
-      <Layout style={{ padding: "0 24px 24px" }}>
-        <AppBreadCrumb />
-        <AppContent />
-        <AppFooter />
+      <AppHeader />
+      <Layout>
+        <AppLeftNav />
+        <Layout style={{ padding: "0 24px 24px" }}>
+          <AppBreadCrumb />
+          <AppContent />
+          <AppFooter />
+        </Layout>
       </Layout>
     </Layout>
-  </Layout>
+  </LayoutContainer>
 );
 
 export default AppLayout;
+const LayoutContainer = styled.div`
+  width: 100%;
+  overflow: hidden;
+`;

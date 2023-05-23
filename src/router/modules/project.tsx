@@ -1,10 +1,11 @@
 import ProjectListPage from "pages/autenticatedApp/projectList";
 import { IRoute } from "types/router";
-
+import { CopyTwoTone } from "@ant-design/icons";
 const project: IRoute[] = [
   {
     path: "/projects",
     label: "项目管理",
+    icon: <CopyTwoTone />,
     children: [
       {
         path: "kanban",

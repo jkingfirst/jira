@@ -1,10 +1,11 @@
 import ProjectListPage from "pages/autenticatedApp/projectList";
 import { IRoute } from "types/router";
-
+import { SmileTwoTone } from "@ant-design/icons";
 const project: IRoute[] = [
   {
     path: "/user",
     label: "用户管理",
+    icon: <SmileTwoTone />,
     children: [
       {
         path: "list",

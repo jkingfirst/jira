@@ -16,6 +16,12 @@ export const deleteObjEmptyProperty = (obj: { [key: string]: unknown }) => {
   }
   return tempObj;
 };
+// 是否是有效数组
+export const isAvailableArray = <T>(arr: T[]) => {
+  return (
+    Object.prototype.toString.call(arr) === "[object Array]" && arr.length > 0
+  );
+};
 export const useDebounce = <T>(value: T, delay?: number) => {
   const [debounceValue, setDebounceValue] = useState(value);
   useEffect(() => {
